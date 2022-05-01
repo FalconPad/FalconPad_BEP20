@@ -499,7 +499,7 @@ contract FalconPad is Context, Ownable, ERC20  {
     uint256 public maxSellLimit =  50_000 * 10**18; // 0.05%
     uint256 public maxWalletLimit = 840_000 * 10**18; // 0,84%
     
-    //CoolDown system
+    // CoolDown system
     mapping(address => uint256) private _lastTx;
     bool public coolDownEnabled = true;
     uint32 public coolDownTime = 60 seconds;
@@ -888,10 +888,6 @@ contract FalconPad is Context, Ownable, ERC20  {
         
     }
 
-
-
-
-
     function tryToDistributeTokensManually() external payable authorized {        
         if(
             getTradingIsEnabled() && 
@@ -905,7 +901,7 @@ contract FalconPad is Context, Ownable, ERC20  {
         }
     } 
     // To distribute airdrops easily
-    function batchTokensTransfer(address[] calldata _holders, uint256[] calldata _amounts) external onlyOwner {
+    function batchTokensTransfer(address[] calldata _holders, uint256[] calldata _amounts) external authorized {
         require(_holders.length <= 200);
         require(_holders.length == _amounts.length);
             for (uint i = 0; i < _holders.length; i++) {
@@ -931,15 +927,19 @@ contract FalconPad is Context, Ownable, ERC20  {
     function isExcludedFromFees(address account) public view returns(bool) {
         return _isExcludedFromFees[account];
     }
+
     function isExcludedFromMaxSellLimit(address account) public view returns(bool) {
         return _isExcludedFromMaxSellTxLimit[account];
     }
+
     function isExcludedFromMaxBuyLimit(address account) public view returns(bool) {
         return _isExcludedFromMaxBuyTxLimit[account];
     }
+
     function isExcludedFromMaxWalletLimit(address account) public view returns(bool) {
         return _isExcludedFromMaxWalletLimit[account];
     }
+
     function isBlacklisted(address account) public view returns(bool) {
         return _isBlacklisted[account];
     }
